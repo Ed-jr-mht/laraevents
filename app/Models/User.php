@@ -18,14 +18,26 @@ class User extends Model
         'cpf' ,
         'password' ,
         'role'
-    
+
     ];
 
     protected $hidden =[
         'password'
     ];
 
-    
+    //relationship
+
+    public function address(){
+        return $this->hasOne(Address::class);
+    }
+
+    public function phones(){
+        return $this->hasMany(Phone::class);
+    }
+
+
+
+
     //mutators
     public function setPasswordAttribute($value){
         $this->attributes['password'] = bcrypt($value);
