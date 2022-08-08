@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\{User,Address,Phone};
+use App\Http\Requests\Auth\RegisterRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class RegisterController extends Controller
 {
@@ -12,18 +14,31 @@ class RegisterController extends Controller
         return view('auth.register');
     }
 
-    public function store(Request $request)
+    public function store(RegisterRequest $request)
     {
-        $requestData= $request->all();
+        $requestData= $request->validated();
 
         $requestData ['user'] ['role'] = 'participant';
 
-        $user= User::create($requestData['user']);
+        DB::beginTransaction();
 
-        $user->address()->create($requestData['address']);
+        try{
+            $user= User::create($requestData['user']);
 
-        foreach($requestData['phones'] as $phone){
-            $user->phones()->create($phone);
+            //abort(500,'Error no Teste');
+
+            $user->address()->create($requestData['address']);
+
+            foreach($requestData['phones'] as $phone){
+                $user->phones()->create($phone);
+
+            }
+            DB::commit();
+
+            return 'Contra Criada !!!';
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            return 'Mensagem: ' . $exception->getMessage();
 
         }
 
