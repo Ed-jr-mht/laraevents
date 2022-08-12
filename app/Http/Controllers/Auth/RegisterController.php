@@ -35,7 +35,9 @@ class RegisterController extends Controller
             }
             DB::commit();
 
-            return 'Contra Criada !!!';
+            return redirect()
+            ->route('auth.login.create')
+            ->with('success','Conta Criada !! Loga ai lek');
         } catch (\Exception $exception) {
             DB::rollBack();
             return 'Mensagem: ' . $exception->getMessage();
