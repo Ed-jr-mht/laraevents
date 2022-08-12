@@ -4,8 +4,11 @@ use App\Http\Controllers\Auth\{
     RegisterController,
     LoginController
 };
+
+
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Participant\Dashboard\DashboardController;
+use App\Http\Controllers\Participant\Dashboard\DashboardController as ParticipantDashboardController;
+use App\Http\Controllers\Organization\Dashboard\DashboardController as OrganizationDashboardController;
 use Monolog\Handler\RotatingFileHandler;
 
 /*
@@ -34,7 +37,15 @@ Route::group(['as'=>'auth.', 'middleware' => 'guest'],function(){
 
 });
 
-Route::get('participant/dashboard',[DashboardController::class,'index']) ->name('participant.dashboard.index')->middleware('auth');
+Route::group(['middleware'=>'auth'], function(){
+
+    Route::get('participant/dashboard',[ParticipantDashboardController::class,'index']) ->name('participant.dashboard.index')-> middleware('role:participant');
+
+    Route::get('organization/dashboard',[OrganizationDashboardController::class,'index']) ->name('organization.dashboard.index')-> middleware('role:organization');
+
+
+});
+
 
 /*
 Route::get('teste',function(){
