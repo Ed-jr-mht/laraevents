@@ -44,4 +44,11 @@ class EventRequest extends FormRequest
             'target_audience'=>'público-alvo'
         ];
     }
+
+    public function messages(){
+        return [
+            'date_format'=> 'O cammpo :attribute não corresponde ao formato 00/00/0000 00:00',
+            'end_date.after' => 'A data final deve ser posterior a data inicial.  '
+        ];
+    }
 }
