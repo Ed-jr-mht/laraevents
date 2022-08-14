@@ -11,7 +11,11 @@ use App\Http\Controllers\Participant\Dashboard\DashboardController as Participan
 use App\Http\Controllers\Organization\Dashboard\DashboardController as OrganizationDashboardController,
 Event\EventController
 ;
+use App\Http\Controllers\Organization\Event\EventSubscriptionController;
+use App\Http\Controllers\Organization\Event\EventPresenceController;
+
 use Monolog\Handler\RotatingFileHandler;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,21 +49,22 @@ Route::group(['middleware'=>'auth'], function(){
 
     Route::group(['prefix'=>'organization','as' => 'organization.','middleware' => 'role:organization'], function(){
 
+
+
+        //dashboard
         Route::get('dashboard',[OrganizationDashboardController::class,'index']) ->name('dashboard.index');
 
+        //eventos
+        Route::post('events/{event}/subscriptions',[EventSubscriptionController::class,'store'])
+            ->name('events.subscriptions.store');
 
+        Route::delete('events/{event}/subscriptions/{user}',[EventSubscriptionController::class, 'destroy'])
+        ->name('events.subscriptions.destroy');
 
-        Route::get('events', [EventController::class, 'index']) ->name('events.index');
+        Route::post('events/{event}/presences/{user}', EventPresenceController::class)->name('events.presences');
 
-        Route::get('events/create', [EventController::class, 'create']) ->name('events.create');
+        Route::resource('events',EventController::class);
 
-        Route::post('events',[EventController::class, 'store'])->name('events.store');
-
-        Route::get('events/{event}/edit',[EventController::class, 'edit'])->name('events.edit');
-
-        Route::put('events/{event}',[EventController::class, 'update'])-> name('events.update');
-
-        Route::delete('events/{event}',[EventController::class, 'destroy'])-> name('events.destroy');
     });
 
    });
@@ -72,3 +77,25 @@ Route::get('teste',function(){
     return $user->address;
 });
 */
+
+
+/*
+
+        FUI FEITO DE OTARIO!!
+
+
+        Route::get('events', [EventController::class, 'index']) ->name('events.index');
+
+        Route::get('events/create', [EventController::class, 'create']) ->name('events.create');
+
+        Route::post('events',[EventController::class, 'store'])->name('events.store');
+
+        Route::get('events/{event}',[EventController::class, 'show'])->name('events.show');
+
+        Route::get('events/{event}/edit',[EventController::class, 'edit'])->name('events.edit');
+
+        Route::put('events/{event}',[EventController::class, 'update'])-> name('events.update');
+
+        Route::delete('events/{event}',[EventController::class, 'destroy'])-> name('events.destroy');
+
+        */

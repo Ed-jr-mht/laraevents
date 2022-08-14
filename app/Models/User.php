@@ -35,6 +35,10 @@ class User extends Althenticable
         return $this->hasMany(Phone::class);
     }
 
+    public function events(){
+        return $this->belongsToMany(Event::class);
+    }
+
 
 
 
