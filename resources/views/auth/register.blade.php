@@ -212,8 +212,8 @@
                     </div>
 
 
-            <button type="submit" class="btn btn-sucess btn-block mt-3">
-
+            <button type="submit" class="btn btn-success btn-block mt-3" >
+                Enviar
             </button>
         </form>
     </div>
